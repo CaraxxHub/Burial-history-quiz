@@ -1,0 +1,544 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Burial History Quiz&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Custom styles for the Inter font and general body layout */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Ensure buttons have pointer cursor */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>button {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Basic styling for the message box to replace alert() */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.message-box {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>left: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translate(-50%, -50%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 2rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 0.75rem; /* rounded-lg */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1000;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-width: 90%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 400px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #d1d5db; /* border-gray-300 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.message-box-overlay {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>left: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: rgba(0, 0, 0, 0.5);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 999;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="min-h-screen bg-gray-100 flex items-center justify-center p-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="quiz-container" class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1 class="text-3xl font-bold text-center text-gray-800 mb-6"&gt;Burial History Quiz&lt;/h1&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="quiz-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="text-center text-gray-500"&gt;Loading quiz...&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="message-box-overlay" class="message-box-overlay hidden"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="message-box" class="message-box hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p id="message-box-text" class="text-lg font-medium text-gray-800 mb-4"&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="message-box-close" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"&gt;OK&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Quiz data</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const quizQuestions = [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"question": "Using the data in Table 2 of the assignment, and the provided average porosity for sandstone (25%), what is the approximate decompacted thickness of the Lower Cretaceous Sandstone (Layer 4) at the time of its deposition? (Present Thickness = 250m)",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"answerOptions": [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "187.5 m",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This value results from multiplying the present thickness by the porosity, rather than using the porosity to calculate the original volume of solids.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "250 m",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This is the present-day thickness, which does not account for the compaction the layer has undergone since deposition.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "333.3 m",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This calculation correctly applies the formula: Decompacted Thickness = Present Thickness / (1 - Average Porosity). For Layer 4: 250m / (1 - 0.25) = 250m / 0.75.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": true</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "312.5 m",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This value might arise from an incorrect application of the porosity value in the decompaction formula.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"hint": "Recall the formula for decompaction: H_decompacted = H_present / (1 - avg_porosity)."</p>
+<p class="p1"><span class="Apple-converted-space">            </span>},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"question": "In the assignment (Table 2), if the Fort Union Formation (Layer 1) has a decompacted thickness of 650m and the Hell Creek Formation (Layer 2) has a decompacted thickness of 200m, what would be the burial depth of the *top* of the Pierre Shale (Layer 3) just *before* the deposition of the Hell Creek Formation, assuming the Pierre Shale was deposited at a paleobathymetry of 100m?",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"answerOptions": [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "100 m",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This is the paleobathymetry of the Pierre Shale at its deposition, not its burial depth after subsequent layers were deposited.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "750 m",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This depth correctly accounts for the paleobathymetry of the Pierre Shale plus the decompacted thickness of the overlying Fort Union Formation only. The question asks for the depth *before* Hell Creek deposition.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": true</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "850 m",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This depth includes the paleobathymetry plus the decompacted thickness of both the Fort Union and Hell Creek formations; however, the question asks for the depth *before* the Hell Creek formation was deposited.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "650 m",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This is the decompacted thickness of the Fort Union Formation alone, not the burial depth of the Pierre Shale.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"hint": "The burial depth of a horizon is its initial depositional depth plus the sum of the decompacted thicknesses of all overlying layers deposited up to that point in time."</p>
+<p class="p1"><span class="Apple-converted-space">            </span>},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"question": "On a burial history plot, what does an upward turn (shallowing) of a specific layer's burial path, followed by a horizontal segment and then renewed burial, typically represent?",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"answerOptions": [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "A period of rapid, continuous subsidence.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Rapid, continuous subsidence would be shown by a steep downward trend in the burial path.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "Deposition in a progressively deepening marine environment.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Deposition in a deepening marine environment would increase paleobathymetry and contribute to a downward burial trend, not an upward turn.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "An unconformity, representing uplift, erosion, and subsequent renewed deposition.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Uplift causes the layer to move to a shallower depth (upward turn), erosion or non-deposition is the horizontal segment, and renewed deposition resumes the downward burial path.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": true</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "Instantaneous compaction of the underlying sediments.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Compaction reduces thickness but doesn't typically cause an upward turn in the burial path of a specific horizon unless associated with regional uplift.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"hint": "Consider what geological processes lead to the removal of previously deposited rock and a break in the sedimentary record."</p>
+<p class="p1"><span class="Apple-converted-space">            </span>},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"question": "If a basin has an average heat flow (Q) of 60 mW/m² and an average thermal conductivity (Kb) of 2.0 W/m°C, what is the geothermal gradient (G)?",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"answerOptions": [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "30 °C/km",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "The geothermal gradient is calculated as G = Q / Kb. Ensure units are consistent (mW/m² to W/m²). 60 mW/m² = 0.060 W/m². So, G = 0.060 W/m² / 2.0 W/m°C = 0.030 °C/m, which is 30 °C/km.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": true</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "120 °C/km",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This value results from multiplying heat flow by thermal conductivity, not dividing.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "0.03 °C/km",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This value is correct in °C/m but the options are in °C/km. Remember to convert meters to kilometers.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "33.3 °C/km",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This value results from incorrectly dividing thermal conductivity by heat flow.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"hint": "The formula for geothermal gradient is G = Q / Kb. Pay attention to units: Q is often in mW/m² and needs to be converted to W/m² (1 W = 1000 mW)."</p>
+<p class="p1"><span class="Apple-converted-space">            </span>},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"question": "Using the geothermal gradient of 26°C/km (calculated from Q=65 mW/m² and Kb=2.5 W/m°C in the assignment) and a surface temperature (Ts) of 10°C, what is the approximate temperature at a depth (Z) of 2000 meters (2 km)?",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"answerOptions": [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "52°C",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This calculation forgets to add the surface temperature (Ts) to the temperature increase due to depth (G * Z).",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "62°C",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Temperature at depth is calculated as T = Ts + (G * Z). So, T = 10°C + (26°C/km * 2 km) = 10°C + 52°C.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": true</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "36°C",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This might result from an arithmetic error or incorrectly applying the surface temperature.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "26°C",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "This is the geothermal gradient per kilometer, not the temperature at 2km depth.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"hint": "Recall the formula: Temperature (T) at depth (Z) = Surface Temperature (Ts) + (Geothermal Gradient (G) * Z)."</p>
+<p class="p1"><span class="Apple-converted-space">            </span>},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"question": "On a burial history plot, a very steep, nearly vertical downward segment for a particular formation indicates:",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"answerOptions": [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "A long period of very slow, continuous sediment accumulation.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Slow accumulation would result in a gentle, less steep downward slope over a long time interval.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "A major erosional event removing overlying strata.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "An erosional event would typically be represented by an upward (shallowing) trend if the layer itself is exhumed, or a hiatus.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "A short period of very rapid sediment deposition and burial.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "A steep downward slope signifies a large increase in depth over a relatively short period of geological time, characteristic of rapid deposition.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": true</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "The formation remained at or near the surface for an extended time.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Remaining near the surface would be shown as a nearly horizontal line at shallow depth.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"hint": "Consider how the rate of change in depth over time is represented graphically."</p>
+<p class="p1"><span class="Apple-converted-space">            </span>},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"question": "If the Bakken Formation (Layer 6 in Table 2) is an organic-rich shale, and the 'oil window' is generally considered to be between 60°C and 120°C, when would this formation begin generating oil based on its burial history curve and the overlaid iso-temperature lines?",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"answerOptions": [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "Immediately after its deposition at 359 Ma.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "At the time of deposition, the formation would be at a relatively shallow depth and low temperature, likely below the oil window.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "When its burial path first crosses the 60°C iso-temperature line.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "The oil window starts when the source rock reaches the minimum temperature required for oil generation (60°C in this case). This is shown where its burial path intersects the corresponding iso-temperature line.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": true</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "Only after it has passed through the 120°C iso-temperature line.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Passing 120°C signifies entering the gas window or potentially the end of the main oil generation phase, not the beginning.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "During the erosion event between 100-90 Ma.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "An erosion event involves uplift and cooling, which would halt or reverse maturation, not initiate oil generation.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"hint": "The 'oil window' defines a specific temperature range. Identify when the source rock enters this range."</p>
+<p class="p1"><span class="Apple-converted-space">            </span>},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"question": "Which of the following lithologies from the assignment's Table 2 would likely experience the MOST significant *mechanical compaction* during the early stages of burial (e.g., first 1000-2000m)?",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"answerOptions": [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "Dolomite/Anhydrite (Ordovician Red River Fm.)",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Dolomite and anhydrite are relatively rigid and experience less mechanical compaction compared to fine-grained clastics.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "Sandstone (Lower Cretaceous Sandstone)",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Sandstones undergo mechanical compaction, but typically less than shales due to stronger grain contacts and often lower initial porosity.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "Shale (Pierre Shale or Jurassic Shale)",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Shales have high initial porosity and are composed of fine-grained clay minerals that readily reorient and dewater under load, leading to significant mechanical compaction.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": true</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "Lignite (within Fort Union Formation)",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Lignite is highly compressible, but shales are a more broadly representative example of significant mechanical compaction among common sedimentary rocks.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"hint": "Consider which rock type typically has the highest initial porosity and is composed of particles that can easily be rearranged under pressure."</p>
+<p class="p1"><span class="Apple-converted-space">            </span>},</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"question": "What is the primary purpose of the 'backstripping' technique in burial history analysis?",</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"answerOptions": [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "To calculate the present-day thickness of formations from seismic data.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Calculating present-day thickness is a direct measurement or interpretation, not the primary goal of backstripping.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "To estimate the original paleobathymetry of ancient marine sediments.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Paleobathymetry is an input for backstripping, not its primary output. It's estimated from facies and fossils.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "To isolate the tectonic subsidence component by removing the effects of sediment and water loading.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "Backstripping systematically removes sediment and water loads (and their isostatic effects) to reveal the subsidence driven purely by tectonic forces.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": true</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"text": "To determine the exact age of unconformities in the stratigraphic record.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"rationale": "The age of unconformities is determined by dating overlying and underlying strata, not by backstripping itself.",</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>"isCorrect": false</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"hint": "Think about the fundamental forces driving basin subsidence and how backstripping helps to isolate one specific component of that subsidence."</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let currentQuestionIndex = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let selectedAnswerIndex = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let shuffledOptions = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let quizStarted = false;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const quizContent = document.getElementById('quiz-content');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const messageBox = document.getElementById('message-box');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const messageBoxText = document.getElementById('message-box-text');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const messageBoxCloseButton = document.getElementById('message-box-close');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const messageBoxOverlay = document.getElementById('message-box-overlay');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Utility function to shuffle an array</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function shuffleArray(array) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = array.length - 1; i &gt; 0; i--) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const j = Math.floor(Math.random() * (i + 1));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>[array[i], array[j]] = [array[j], array[i]];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return array;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showMessageBox(message) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>messageBoxText.textContent = message;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>messageBox.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>messageBoxOverlay.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function hideMessageBox() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>messageBox.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>messageBoxOverlay.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>messageBoxCloseButton.addEventListener('click', hideMessageBox);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>messageBoxOverlay.addEventListener('click', hideMessageBox); // Close if overlay is clicked</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderQuestion() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (currentQuestionIndex &gt;= quizQuestions.length) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderResults();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const questionData = quizQuestions[currentQuestionIndex];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>shuffledOptions = shuffleArray([...questionData.answerOptions]); // Shuffle options for current question</p>
+<p class="p1"><span class="Apple-converted-space">            </span>selectedAnswerIndex = null; // Reset selected answer for new question</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>quizContent.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mb-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-sm font-semibold text-blue-600 mb-1"&gt;Question ${currentQuestionIndex + 1} of ${quizQuestions.length}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2 class="text-xl font-semibold text-gray-900"&gt;${questionData.question}&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="options-container" class="space-y-3 mb-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>${shuffledOptions.map((option, index) =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button type="button" data-index="${index}" class="option-button w-full text-left p-3 border border-gray-300 rounded-md hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>${option.text}</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>`).join('')}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex flex-col sm:flex-row sm:justify-between items-center space-y-3 sm:space-y-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="check-answer-button" class="px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition-colors duration-200 opacity-50 cursor-not-allowed" disabled&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>Check Answer</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="show-hint-button" class="px-6 py-3 bg-yellow-500 text-white font-medium rounded-md hover:bg-yellow-600 transition-colors duration-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>Show Hint</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="next-question-button" class="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>Next Question</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="restart-quiz-button-top" class="px-6 py-3 bg-gray-500 text-white font-medium rounded-md hover:bg-gray-600 transition-colors duration-200 hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>Restart Quiz</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="feedback-container" class="mt-6 p-4 rounded-md hidden"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="hint-display" class="mt-4 p-4 bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-md hidden"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>attachEventListeners();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateCheckAnswerButtonState();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function attachEventListeners() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const optionsContainer = document.getElementById('options-container');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const checkAnswerButton = document.getElementById('check-answer-button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const showHintButton = document.getElementById('show-hint-button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const nextQuestionButton = document.getElementById('next-question-button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const restartQuizButtonTop = document.getElementById('restart-quiz-button-top');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>optionsContainer.addEventListener('click', (event) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const targetButton = event.target.closest('.option-button');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (targetButton &amp;&amp; !checkAnswerButton.disabled) { // Only allow selection if not already checked</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Deselect previous</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.querySelectorAll('.option-button').forEach(btn =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>btn.classList.remove('bg-blue-200', 'border-blue-500');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Select new</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>targetButton.classList.add('bg-blue-200', 'border-blue-500');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>selectedAnswerIndex = parseInt(targetButton.dataset.index);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>updateCheckAnswerButtonState();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>checkAnswerButton.addEventListener('click', checkAnswer);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showHintButton.addEventListener('click', showHint);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>nextQuestionButton.addEventListener('click', handleNextQuestion);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>restartQuizButtonTop.addEventListener('click', handleRestartQuiz);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateCheckAnswerButtonState() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const checkAnswerButton = document.getElementById('check-answer-button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (selectedAnswerIndex !== null) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checkAnswerButton.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checkAnswerButton.classList.remove('opacity-50', 'cursor-not-allowed');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checkAnswerButton.disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checkAnswerButton.classList.add('opacity-50', 'cursor-not-allowed');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function checkAnswer() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (selectedAnswerIndex === null) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showMessageBox("Please select an answer before checking.");</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const correctAnswer = shuffledOptions.find(option =&gt; option.isCorrect);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const selectedOption = shuffledOptions[selectedAnswerIndex];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const feedbackContainer = document.getElementById('feedback-container');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const optionButtons = document.querySelectorAll('.option-button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const checkAnswerButton = document.getElementById('check-answer-button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const nextQuestionButton = document.getElementById('next-question-button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const showHintButton = document.getElementById('show-hint-button');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>checkAnswerButton.disabled = true; // Disable checking after an attempt</p>
+<p class="p1"><span class="Apple-converted-space">            </span>checkAnswerButton.classList.add('opacity-50', 'cursor-not-allowed');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showHintButton.classList.add('hidden'); // Hide hint button after checking</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Disable all option buttons</p>
+<p class="p1"><span class="Apple-converted-space">            </span>optionButtons.forEach(btn =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.classList.remove('hover:bg-blue-50', 'focus:ring-2'); // Remove hover/focus styles</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>feedbackContainer.classList.remove('hidden');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (selectedOption.isCorrect) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>score++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>feedbackContainer.classList.remove('bg-red-100', 'text-red-800', 'border-red-300');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>feedbackContainer.classList.add('bg-green-100', 'text-green-800', 'border-green-300');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>feedbackContainer.innerHTML = `&lt;p class="font-bold"&gt;Correct!&lt;/p&gt;&lt;p&gt;${selectedOption.rationale}&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>feedbackContainer.classList.remove('bg-green-100', 'text-green-800', 'border-green-300');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>feedbackContainer.classList.add('bg-red-100', 'text-red-800', 'border-red-300');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>feedbackContainer.innerHTML = `&lt;p class="font-bold"&gt;Incorrect.&lt;/p&gt;&lt;p&gt;${selectedOption.rationale}&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Highlight correct answer</p>
+<p class="p1"><span class="Apple-converted-space">            </span>optionButtons.forEach((btn, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (shuffledOptions[index].isCorrect) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>btn.classList.add('bg-green-300', 'border-green-600', 'font-semibold');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else if (index === selectedAnswerIndex &amp;&amp; !selectedOption.isCorrect) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>btn.classList.add('bg-red-300', 'border-red-600', 'font-semibold');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>nextQuestionButton.classList.remove('hidden'); // Show next question button</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showHint() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const hintDisplay = document.getElementById('hint-display');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const questionData = quizQuestions[currentQuestionIndex];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (questionData.hint) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>hintDisplay.textContent = `Hint: ${questionData.hint}`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>hintDisplay.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showMessageBox("No hint available for this question.");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleNextQuestion() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentQuestionIndex++;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>renderQuestion();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderResults() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>quizContent.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2 class="text-2xl font-bold text-gray-900 mb-4"&gt;Quiz Completed!&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-xl text-gray-700 mb-6"&gt;You scored &lt;span class="font-extrabold text-blue-600"&gt;${score}&lt;/span&gt; out of &lt;span class="font-extrabold text-blue-600"&gt;${quizQuestions.length}&lt;/span&gt; questions.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="restart-quiz-button-bottom" class="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>Restart Quiz</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('restart-quiz-button-bottom').addEventListener('click', handleRestartQuiz);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleRestartQuiz() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentQuestionIndex = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>selectedAnswerIndex = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>shuffledOptions = [];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>quizStarted = false; // Reset quiz started state</p>
+<p class="p1"><span class="Apple-converted-space">            </span>startQuiz(); // Re-start the quiz</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function startQuiz() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Initial screen or directly render the first question</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!quizStarted) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>quizContent.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-lg text-gray-700 mb-6"&gt;Test your knowledge of Burial History with this interactive quiz!&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button id="start-button" class="px-8 py-4 bg-blue-600 text-white font-bold text-xl rounded-lg shadow-lg hover:bg-blue-700 transition-colors duration-200 transform hover:scale-105"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>Start Quiz</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('start-button').addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>quizStarted = true;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>renderQuestion();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderQuestion(); // This branch is for restarting after completion</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Initialize the quiz</p>
+<p class="p1"><span class="Apple-converted-space">        </span>startQuiz();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
