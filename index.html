@@ -1,5 +1,3 @@
-HTML
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -301,4 +299,197 @@ HTML
                 "answerOptions": [
                     {
                         "text": "Because paleobathymetry directly influences the present-day color of the sedimentary rocks.",
-                        "rationale": "While depositional environment can affect rock color,
+                        "rationale": "While depositional environment can affect rock color, paleobathymetry itself doesn't directly determine the present-day color.",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Because it is a primary control on the type of fossils preserved, which are used for dating.",
+                        "rationale": "Fossils are indeed used for dating, but paleobathymetry itself is not the primary control on the *type* of fossils in a way that fundamentally changes dating accuracy.",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Because it affects the initial sediment thickness and thus the total burial depth and thermal history.",
+                        "rationale": "Paleobathymetry determines the initial water depth above the sediment, which contributes to the total load and influences compaction, subsidence, and ultimately the thermal history, especially for deeper time intervals with significant water depths.",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Because it dictates the type of seismic equipment that can be used to image subsurface structures.",
+                        "rationale": "While water depth affects seismic acquisition, paleobathymetry of ancient sediments doesn't directly impact the choice of modern seismic equipment.",
+                        "isCorrect": false
+                    }
+                ],
+                "hint": "Consider how the initial water depth influences the subsequent burial and thermal evolution of sediments."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let shuffledOptions = [];
+        let selectedAnswerIndex = null; // Stores the index of the option the user selected for the current question
+
+        const quizContent = document.getElementById('quiz-content');
+        const messageBox = document.getElementById('message-box');
+        const messageBoxText = document.getElementById('message-box-text');
+        const messageBoxCloseButton = document.getElementById('message-box-close');
+        const messageBoxOverlay = document.getElementById('message-box-overlay');
+
+        // --- Helper Functions ---
+
+        // Function to shuffle an array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Function to show a custom message box (replaces alert())
+        function showMessageBox(message) {
+            messageBoxText.textContent = message;
+            messageBox.classList.remove('hidden');
+            messageBoxOverlay.classList.remove('hidden');
+        }
+
+        // Function to hide the custom message box
+        function hideMessageBox() {
+            messageBox.classList.add('hidden');
+            messageBoxOverlay.classList.add('hidden');
+        }
+
+        // --- Core Quiz Logic ---
+
+        // Function to display the current question
+        function displayQuestion() {
+            // Check if all questions are answered
+            if (currentQuestionIndex >= quizQuestions.length) {
+                showResults();
+                return;
+            }
+
+            const currentQuestion = quizQuestions[currentQuestionIndex];
+            shuffledOptions = shuffleArray([...currentQuestion.answerOptions]); // Shuffle options for the current question
+            selectedAnswerIndex = null; // Reset selected answer for the new question
+
+            // Construct the HTML for the current question
+            quizContent.innerHTML = `
+                <div class="text-gray-600 text-lg mb-4">
+                    Question ${currentQuestionIndex + 1} / ${quizQuestions.length}
+                </div>
+                <div class="bg-blue-50 p-4 rounded-md mb-6">
+                    <p class="text-xl font-medium text-gray-900 mb-4">
+                        ${currentQuestion.question}
+                    </p>
+                    ${currentQuestion.hint ? `<p class="text-sm text-gray-700 italic">Hint: ${currentQuestion.hint}</p>` : ''}
+                </div>
+                <div id="answer-options" class="grid grid-cols-1 gap-4 mb-6">
+                    ${shuffledOptions.map((option, index) => `
+                        <button
+                            class="p-4 rounded-md border text-left transition-all duration-300 bg-gray-50 border-gray-300 hover:bg-gray-100"
+                            data-index="${index}"
+                        >
+                            ${option.text}
+                        </button>
+                    `).join('')}
+                </div>
+                <div id="rationale-display" class="hidden p-4 rounded-md mb-6"></div>
+                <div class="flex justify-end">
+                    <button id="next-button" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 opacity-50 cursor-not-allowed" disabled>
+                        ${currentQuestionIndex === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next Question'}
+                    </button>
+                </div>
+            `;
+
+            // Add event listeners to newly created answer buttons
+            document.querySelectorAll('#answer-options button').forEach(button => {
+                button.addEventListener('click', handleAnswerClick);
+            });
+
+            // Add event listener to the next button
+            document.getElementById('next-button').addEventListener('click', handleNextQuestion);
+        }
+
+        // Handle user's answer selection
+        function handleAnswerClick(event) {
+            // If an answer has already been selected for this question, do nothing
+            if (selectedAnswerIndex !== null) return;
+
+            const clickedButton = event.currentTarget;
+            const index = parseInt(clickedButton.dataset.index); // Get the index of the clicked option
+            selectedAnswerIndex = index; // Store the selected index
+
+            const selectedOption = shuffledOptions[index];
+            const rationaleDisplay = document.getElementById('rationale-display');
+            const nextButton = document.getElementById('next-button');
+
+            // Update button styles and rationale display
+            document.querySelectorAll('#answer-options button').forEach((button, btnIndex) => {
+                button.disabled = true; // Disable all answer buttons after selection
+
+                if (shuffledOptions[btnIndex].isCorrect) {
+                    // Always highlight the correct answer
+                    button.classList.add('bg-green-100', 'border-green-500');
+                    button.classList.remove('bg-gray-50', 'border-gray-300', 'hover:bg-gray-100');
+                    // Add a stronger visual cue if it's the correct answer
+                    button.classList.add('ring-2', 'ring-green-300');
+                } else if (btnIndex === selectedAnswerIndex) {
+                    // If the user selected an incorrect answer
+                    button.classList.add('bg-red-100', 'border-red-500');
+                    button.classList.remove('bg-gray-50', 'border-gray-300', 'hover:bg-gray-100');
+                } else {
+                    // Dim other unselected incorrect options
+                    button.classList.add('opacity-70', 'cursor-not-allowed');
+                }
+            });
+
+            // Display rationale
+            if (selectedOption.isCorrect) {
+                score++; // Increment score if correct
+                rationaleDisplay.className = 'p-4 rounded-md mb-6 bg-green-50 text-green-800 border border-green-400';
+            } else {
+                rationaleDisplay.className = 'p-4 rounded-md mb-6 bg-red-50 text-red-800 border border-red-400';
+            }
+            rationaleDisplay.innerHTML = `<p class="font-semibold mb-2">Rationale:</p><p>${selectedOption.rationale}</p>`;
+            rationaleDisplay.classList.remove('hidden');
+
+            // Enable the next button
+            nextButton.disabled = false;
+            nextButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        // Handle moving to the next question
+        function handleNextQuestion() {
+            currentQuestionIndex++;
+            displayQuestion(); // Display the next question or results
+        }
+
+        // Show the final results screen
+        function showResults() {
+            quizContent.innerHTML = `
+                <div class="text-center">
+                    <h2 class="text-2xl font-semibold text-gray-700 mb-4">Quiz Results</h2>
+                    <p class="text-lg text-gray-600">You scored ${score} out of ${quizQuestions.length}!</p>
+                    <button id="restart-button" class="mt-6 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline">Play Again</button>
+                </div>
+            `;
+            // Add event listener to the restart button
+            document.getElementById('restart-button').addEventListener('click', resetQuiz);
+        }
+
+        // Restart the quiz from the beginning
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswerIndex = null; // Reset selected answer
+            displayQuestion(); // Start the quiz over
+        }
+
+        // --- Event Listeners for Message Box ---
+        messageBoxCloseButton.addEventListener('click', hideMessageBox);
+        messageBoxOverlay.addEventListener('click', hideMessageBox); // Close if clicking outside
+
+        // Initial call to display the first question when the page loads
+        document.addEventListener('DOMContentLoaded', displayQuestion);
+    </script>
+</body>
+</html>
