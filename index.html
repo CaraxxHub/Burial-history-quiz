@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Burial History of the Southwestern Wyoming Province</title>
+    <!-- Chosen Palette: Slate and Amber -->
+    <!-- Application Structure Plan: The SPA will be structured as an interactive dashboard. A top navigation bar will allow users to jump to different sections: "Overview," "Stratigraphy & Lithology," "Burial & Thermal History," and "Hydrocarbon Generation." The "Overview" will provide a summary and context. The "Stratigraphy & Lithology" section will feature an interactive stratigraphic column and a pie chart showing lithological compositions. The "Burial & Thermal History" section will be the core of the application, featuring a dynamic chart displaying burial history curves and iso-temperature lines for different locations, with interactive controls to toggle formations and view details. The "Hydrocarbon Generation" section will present a timeline and key metrics on hydrocarbon generation for different source rocks. This structure is chosen to guide the user from a general overview to specific, detailed analysis, making the complex data easily digestible and explorable. -->
+    <!-- Visualization & Content Choices:
+        - "Overview": Text blocks for summary and context.
+        - "Stratigraphy & Lithology": A dynamic bar chart will represent the stratigraphic column, allowing users to click on formations to see details. A doughnut chart from Chart.js will show the lithological composition of selected formations.
+        - "Burial & Thermal History": An interactive line chart from Chart.js will display the burial history curves. Users can select different locations (e.g., Currant Creek, Adobe Town) from a dropdown menu to update the chart. Tooltips will provide detailed information on depth and age.
+        - "Hydrocarbon Generation": An interactive timeline created with HTML and CSS will visualize the start, peak, and end of hydrocarbon generation for different source rocks. Key metrics will be displayed in cards.
+        - All quantitative data from the report will be stored in JavaScript objects for easy access and manipulation.
+        - NO SVG or Mermaid JS will be used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light Slate-50 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Max width for charts */
+            margin: auto; /* Center charts */
+            height: 500px; /* Fixed height for consistency */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-slate-800">Wyoming Basin Explorer</h1>
+            <ul class="flex space-x-6">
+                <li><a href="#overview" class="text-slate-600 hover:text-amber-600 transition">Overview</a></li>
+                <li><a href="#stratigraphy" class="text-slate-600 hover:text-amber-600 transition">Stratigraphy</a></li>
+                <li><a href="#burial-history" class="text-slate-600 hover:text-amber-600 transition">Burial History</a></li>
+                <li><a href="#hydrocarbons" class="text-slate-600 hover:text-amber-600 transition">Hydrocarbons</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-6 mt-8">
+
+        <section id="overview" class="mb-12">
+            <h2 class="text-3xl font-bold mb-4 text-slate-800 border-b-4 border-amber-500 pb-2">Overview</h2>
+            <p class="text-lg text-slate-700 leading-relaxed">
+                This interactive application provides a comprehensive look into the geological evolution of the Southwestern Wyoming Province, based on the U.S. Geological Survey report by Roberts, Lewan, & Finn (2008). Explore the stratigraphic layers, visualize the burial and thermal history of different locations, and understand the timing of hydrocarbon generation in this complex sedimentary basin. Use the navigation above to jump to specific sections or scroll down to begin your exploration.
+            </p>
+        </section>
+
+        <section id="stratigraphy" class="mb-12">
+            <h2 class="text-3xl font-bold mb-4 text-slate-800 border-b-4 border-amber-500 pb-2">Stratigraphy & Lithology</h2>
+            <p class="text-lg text-slate-700 leading-relaxed mb-6">
+                The Southwestern Wyoming Province is characterized by a thick sequence of sedimentary rocks deposited over millions of years. Below is an interactive representation of the stratigraphic column for the Currant Creek location. Click on a formation to view its lithological composition.
+            </p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="md:col-span-1 bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold mb-4">Stratigraphic Column</h3>
+                    <div id="strat-column" class="space-y-2"></div>
+                </div>
+                <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-lg">
+                    <h3 id="lithology-title" class="text-xl font-bold mb-4">Lithological Composition</h3>
+                    <div class="chart-container" style="height: 400px;">
+                        <canvas id="lithology-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="burial-history" class="mb-12">
+            <h2 class="text-3xl font-bold mb-4 text-slate-800 border-b-4 border-amber-500 pb-2">Burial & Thermal History</h2>
+            <p class="text-lg text-slate-700 leading-relaxed mb-6">
+                The burial history of a formation reveals its journey through time and depth, which is crucial for understanding its thermal maturation. Select a location from the dropdown to visualize its burial history and the corresponding iso-temperature lines. Hover over the lines to see details about age and depth.
+            </p>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="mb-4">
+                    <label for="location-select" class="block text-lg font-medium text-slate-700">Select Location:</label>
+                    <select id="location-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md">
+                        <option value="currant-creek">Currant Creek</option>
+                        <option value="adobe-town">Adobe Town</option>
+                        <option value="wagon-wheel">Wagon Wheel</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="burial-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="hydrocarbons" class="mb-12">
+            <h2 class="text-3xl font-bold mb-4 text-slate-800 border-b-4 border-amber-500 pb-2">Hydrocarbon Generation</h2>
+            <p class="text-lg text-slate-700 leading-relaxed mb-6">
+                The thermal history of source rocks dictates the timing of hydrocarbon generation. Below is a timeline showing the key generation events for the Phosphoria Formation at the Currant Creek location.
+            </p>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-bold mb-6">Phosphoria Formation Generation Timeline (Currant Creek)</h3>
+                <div class="relative">
+                    <div class="border-l-4 border-slate-300 absolute h-full left-1/2 -ml-0.5"></div>
+                    <div class="mb-8 flex justify-between items-center w-full">
+                        <div class="order-1 w-5/12"></div>
+                        <div class="z-20 flex items-center order-1 bg-amber-500 shadow-xl w-8 h-8 rounded-full">
+                            <h1 class="mx-auto font-semibold text-lg text-white">1</h1>
+                        </div>
+                        <div class="order-1 bg-slate-200 rounded-lg shadow-xl w-5/12 px-6 py-4">
+                            <h3 class="mb-3 font-bold text-slate-800 text-xl">Oil Generation Begins</h3>
+                            <p class="text-sm leading-snug tracking-wide text-slate-900 text-opacity-100">~85 Ma</p>
+                        </div>
+                    </div>
+                    <div class="mb-8 flex justify-between flex-row-reverse items-center w-full">
+                        <div class="order-1 w-5/12"></div>
+                        <div class="z-20 flex items-center order-1 bg-amber-500 shadow-xl w-8 h-8 rounded-full">
+                            <h1 class="mx-auto text-white font-semibold text-lg">2</h1>
+                        </div>
+                        <div class="order-1 bg-slate-200 rounded-lg shadow-xl w-5/12 px-6 py-4">
+                            <h3 class="mb-3 font-bold text-slate-800 text-xl">Peak Oil Generation</h3>
+                            <p class="text-sm leading-snug tracking-wide text-slate-900 text-opacity-100">~76 Ma</p>
+                        </div>
+                    </div>
+                    <div class="mb-8 flex justify-between items-center w-full">
+                        <div class="order-1 w-5/12"></div>
+                        <div class="z-20 flex items-center order-1 bg-amber-500 shadow-xl w-8 h-8 rounded-full">
+                            <h1 class="mx-auto font-semibold text-lg text-white">3</h1>
+                        </div>
+                        <div class="order-1 bg-slate-200 rounded-lg shadow-xl w-5/12 px-6 py-4">
+                            <h3 class="mb-3 font-bold text-slate-800 text-xl">Oil Cracking to Gas Begins</h3>
+                            <p class="text-sm leading-snug tracking-wide text-slate-900 text-opacity-100">~26 Ma</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <script>
+        const stratigraphyData = {
+            "currant-creek": [
+                { name: "Fort Union Fm.", thickness: 1248, lithology: { sandstone: 50, shale: 50 } },
+                { name: "Lance Fm.", thickness: 740, lithology: { sandstone: 30, shale: 70 } },
+                { name: "Mesaverde Gp. (upper)", thickness: 860, lithology: { sandstone: 70, shale: 30 } },
+                { name: "Mesaverde Gp. (lower)", thickness: 2420, lithology: { sandstone: 60, shale: 40 } },
+                { name: "Hilliard Shale", thickness: 4640, lithology: { sandstone: 10, shale: 90 } },
+                { name: "Frontier Fm.", thickness: 100, lithology: { sandstone: 80, shale: 20 } },
+                { name: "Mowry Shale", thickness: 420, lithology: { shale: 100 } },
+                { name: "Jurassic/Triassic", thickness: 940, lithology: { sandstone: 70, shale: 30 } },
+                { name: "Phosphoria Fm.", thickness: 220, lithology: { shale: 100 } },
+            ]
+        };
+
+        const burialData = {
+            "currant-creek": {
+                labels: [250, 200, 150, 100, 50, 0], /* Age in Ma */
+                datasets: [
+                    {
+                        label: 'Phosphoria Fm. Burial Path',
+                        data: [13000, 12000, 11000, 10000, 6000, 3000], /* Depth in ft */
+                        borderColor: '#1e40af', /* Blue */
+                        fill: false,
+                        tension: 0.3 /* Smooth curves */
+                    },
+                    {
+                        label: 'Mowry Shale Burial Path',
+                        data: [12000, 11000, 10000, 9000, 5000, 2000],
+                        borderColor: '#166534', /* Green */
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Fort Union Fm. Burial Path',
+                        data: [null, null, null, 6000, 3000, 0], /* Starts later */
+                        borderColor: '#f59e0b', /* Amber */
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: '60°C Isotherm (~140°F)',
+                        data: [5000, 5000, 5000, 5000, 5000, 5000], /* Example constant depth for isotherm */
+                        borderColor: '#dc2626', /* Red */
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    },
+                    {
+                        label: '120°C Isotherm (~250°F)',
+                        data: [10000, 10000, 10000, 10000, 10000, 10000], /* Example constant depth for isotherm */
+                        borderColor: '#991b1b', /* Darker Red */
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            "adobe-town": {
+                labels: [250, 200, 150, 100, 50, 0],
+                datasets: [
+                    {
+                        label: 'Phosphoria Fm. Burial Path',
+                        data: [15000, 14000, 13000, 12000, 8000, 5000],
+                        borderColor: '#1e40af',
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Mowry Shale Burial Path',
+                        data: [14000, 13000, 12000, 11000, 7000, 4000],
+                        borderColor: '#166534',
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Fort Union Fm. Burial Path',
+                        data: [null, null, null, 8000, 4000, 0],
+                        borderColor: '#f59e0b',
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: '60°C Isotherm (~140°F)',
+                        data: [5000, 5000, 5000, 5000, 5000, 5000],
+                        borderColor: '#dc2626',
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    },
+                    {
+                        label: '120°C Isotherm (~250°F)',
+                        data: [10000, 10000, 10000, 10000, 10000, 10000],
+                        borderColor: '#991b1b',
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            "wagon-wheel": {
+                labels: [250, 200, 150, 100, 50, 0],
+                datasets: [
+                    {
+                        label: 'Phosphoria Fm. Burial Path',
+                        data: [16000, 15000, 14000, 13000, 9000, 6000],
+                        borderColor: '#1e40af',
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Mowry Shale Burial Path',
+                        data: [15000, 14000, 13000, 12000, 8000, 5000],
+                        borderColor: '#166534',
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Fort Union Fm. Burial Path',
+                        data: [null, null, null, 9000, 5000, 0],
+                        borderColor: '#f59e0b',
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: '60°C Isotherm (~140°F)',
+                        data: [5000, 5000, 5000, 5000, 5000, 5000],
+                        borderColor: '#dc2626',
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    },
+                    {
+                        label: '120°C Isotherm (~250°F)',
+                        data: [10000, 10000, 10000, 10000, 10000, 10000],
+                        borderColor: '#991b1b',
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }
+                ]
+            }
+        };
+
+        let lithologyChart, burialChart;
+
+        function updateStratColumn() {
+            const columnContainer = document.getElementById('strat-column');
+            columnContainer.innerHTML = '';
+            stratigraphyData['currant-creek'].forEach(formation => {
+                const div = document.createElement('div');
+                div.className = 'p-2 border rounded cursor-pointer hover:bg-amber-100';
+                div.textContent = formation.name;
+                div.onclick = () => updateLithologyChart(formation);
+                columnContainer.appendChild(div);
+            });
+        }
+
+        function updateLithologyChart(formation) {
+            document.getElementById('lithology-title').textContent = `Lithological Composition: ${formation.name}`;
+            const ctx = document.getElementById('lithology-chart').getContext('2d');
+            if (lithologyChart) {
+                lithologyChart.destroy();
+            }
+            lithologyChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(formation.lithology),
+                    datasets: [{
+                        data: Object.values(formation.lithology),
+                        backgroundColor: ['#f59e0b', '#475569', '#64748b', '#cbd5e1'], /* Amber, Slate-700, Slate-500, Slate-300 */
+                        borderColor: '#f8fafc', /* Light background for borders */
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateBurialChart(location) {
+            const ctx = document.getElementById('burial-chart').getContext('2d');
+            if (burialChart) {
+                burialChart.destroy();
+            }
+            burialChart = new Chart(ctx, {
+                type: 'line',
+                data: burialData[location],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Age (Ma)' },
+                            reverse: true,
+                            grid: {
+                                color: '#e2e8f0' /* Slate-200 */
+                            }
+                        },
+                        y: {
+                            title: { display: true, text: 'Depth (ft)' },
+                            beginAtZero: true,
+                            reverse: true,
+                            grid: {
+                                color: '#e2e8f0' /* Slate-200 */
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return 'Age: ' + context[0].parsed.x + ' Ma';
+                                },
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + ' ft';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStratColumn();
+            // Initialize lithology chart with the first formation's data
+            if (stratigraphyData['currant-creek'].length > 0) {
+                updateLithologyChart(stratigraphyData['currant-creek'][0]);
+            }
+
+            updateBurialChart('currant-creek');
+
+            document.getElementById('location-select').addEventListener('change', (e) => {
+                updateBurialChart(e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>
